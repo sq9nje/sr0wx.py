@@ -185,12 +185,12 @@ for el in data:
         if el[0:7]=='file://':
             soundSamples[el] = pygame.mixer.Sound(el[7:])
         if el is not "_" and el not in soundSamples:
-            if not os.path.isfile(config.lang+"/"+el+".ogg"):
-                debug.log("CORE", "couldn't find %s"%(config.lang+"/"+el+".ogg"), 3)
+            if not os.path.isfile(os.sep.join((os.path.dirname(sys.argv[0]), config.lang, el+".ogg"))):
+                debug.log("CORE", "couldn't find %s"%(os.sep.join((os.path.dirname(sys.argv[0]), config.lang, el+".ogg"))), 3)
                 soundSamples[el] = pygame.sndarray.make_sound( cw.cw("^") )
                 if config.pygameBug==1:
                     soundSamples[el] = pygame.sndarray.make_sound(pygame.sndarray.array(soundSamples[el])[:len(pygame.sndarray.array(soundSamples[el]))/2])
-            else: soundSamples[el] = pygame.mixer.Sound(config.lang+"/"+el+".ogg")
+            else: soundSamples[el] = pygame.mixer.Sound(os.sep.join((os.path.dirname(sys.argv[0]), config.lang, el+".ogg")))
 
 # If programme configuration specifies CTCSS subtone frequency this tone
 # will be played as long as the message.
@@ -208,10 +208,10 @@ if config.serialPort is not None:
     import serial
     try:
         ser = serial.Serial(config.serialPort, config.serialBaudRate)
-	if config.serialSignal=='DTR':
-	    ser.setDTR(0); ser.setRTS(1)
+        if config.serialSignal=='DTR':
+            ser.setDTR(0); ser.setRTS(1)
         else:
-	    ser.setDTR(1); ser.setRTS(0)
+            ser.setDTR(1); ser.setRTS(0)
     except:
         debug.log("CORE", "Failed to open %s@%i"%(config.serialPort, config.serialBaudRate), 3)
 

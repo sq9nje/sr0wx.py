@@ -39,7 +39,10 @@ def log(moduleName, message, buglevel=0):
     if buglevel>=config.showLevel:
         print message
     if buglevel>=config.writeLevel:
-        filename = dt.strftime("%y-%m-%d")+".log"
+        if hasattr(config, 'path'):
+            filename = os.sep.join((config.path, dt.strftime("%y-%m-%d")+".log"))
+        else:
+            filename = dt.strftime("%y-%m-%d")+".log"
         if not os.path.exists(filename):
             logfile = open(filename, 'w')
         else:
